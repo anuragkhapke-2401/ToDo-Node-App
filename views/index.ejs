@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white text-center">
+      <h2>📝 To-Do List</h2>
+    </div>
+    <div class="card-body">
+      <form action="/add" method="POST" class="d-flex mb-4">
+        <input type="text" name="title" class="form-control me-2" placeholder="New task..." required>
+        <button class="btn btn-success">Add</button>
+      </form>
+
+      <ul class="list-group">
+        <% if (todos.length === 0) { %>
+          <li class="list-group-item text-muted">No tasks yet!</li>
+        <% } %>
+        <% todos.forEach(todo => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center <% if (todo.completed) { %>list-group-item-success<% } %>">
+            <%= todo.title %>
+            <div>
+              <% if (!todo.completed) { %>
+                <form action="/complete/<%= todo.id %>" method="POST" class="d-inline">
+                  <button class="btn btn-sm btn-outline-primary">✅ Done</button>
+                </form>
+              <% } %>
+              <form action="/delete/<%= todo.id %>" method="POST" class="d-inline ms-2">
+                <button class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+              </form>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
