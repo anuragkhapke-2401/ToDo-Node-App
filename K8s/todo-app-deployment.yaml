@@ -20,7 +20,12 @@ spec:
             - containerPort: 3000
           env:
             - name: DB_HOST
-              value: mysql  # use service name
+              value: mysql  # MySQL service name
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
