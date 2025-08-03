@@ -115,4 +115,12 @@ then login into mysql using command **mysql -u root -p**  and enter password and
 <img width="1650" height="367" alt="Screenshot from 2025-08-03 21-09-15" src="https://github.com/user-attachments/assets/508e3a47-deac-49b2-8442-5a3b9c4f5be6" />
 
 
-     
+**If you're using AWS EC2, ensure that the NodePort range (30000–32767) is open in the instance's security group. This will allow you to access your TODO app via HTTP at http://<public_ip_of_your_node>:<node_port> from your browser.**
+
+<img width="1847" height="1008" alt="Screenshot from 2025-08-03 21-14-49" src="https://github.com/user-attachments/assets/42b4b128-9675-4f15-9312-9e58d62ec1a2" />
+
+**Once again, exec into your MySQL pod and verify whether the values are being inserted correctly.**
+
+<img width="1650" height="630" alt="Screenshot from 2025-08-03 21-13-03" src="https://github.com/user-attachments/assets/56c84839-514a-47d9-92f5-301cf99f8a02" />
+
+
