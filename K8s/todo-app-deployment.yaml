@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: your-app-image:tag  # Replace with your actual image name
+          image: anuragkhapke2402/todo-app-two-tire:latest  # Replace with your actual image name
           ports:
             - containerPort: 3000
           env:
