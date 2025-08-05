@@ -39,14 +39,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
       
-      - name: Update deployment file with new image tag
+      - name: Update deployment YAML with new image tag
         run: |
-          sed -i "s|image: .*$|image: $IMAGE_NAME:$BUILD_TAG|" K8s/todo-app-deployment.yaml
+          sed -i "s|image: .*|image: $IMAGE_NAME:$BUILD_TAG|" K8s/todo-app-deployment.yaml
 
       - name: Commit and push updated deployment file
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add K8s/todo-app-deployment.yaml
-          git commit -m "Update image tag to $BUILD_TAG" || echo "No changes to commit"
-          git push
+
+          # Only commit if there's an actual change
+          git diff --cached --quiet && echo "No changes to commit." || (
+            git commit -m "Update image tag to $BUILD_TAG"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git push
+          ) 
