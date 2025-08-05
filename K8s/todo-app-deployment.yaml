@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: todo-app-two-tier:6993cdf
+          image: todo-app-two-tier:ae1ad85
           ports:
             - containerPort: 3000
           env:
