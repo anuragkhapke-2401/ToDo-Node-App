@@ -39,10 +39,10 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
       
-      - name: Update deployment YAML with new image tag
+      - name: Update Kubernetes YAML
         run: |
-          sed -i "s|image: .*|image: $IMAGE_NAME:$BUILD_TAG|" K8s/todo-app-deployment.yaml
-
+          sed -i "s|image:.*|image: anuragkhapke2402/todo-app-two-tier:${{ env.BUILD_ID }}|g" K8s/todo-app-deployment.yaml
+            
       - name: Commit and push updated deployment file
         run: |
           git config --global user.name "github-actions"
