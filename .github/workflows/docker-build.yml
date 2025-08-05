@@ -29,7 +29,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Extract short SHA for version tag
-        id: extract_sha
         run: echo "BUILD_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Build and Push Docker Image
@@ -38,20 +37,19 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
-      
+
       - name: Update Kubernetes YAML
         run: |
-          sed -i "s|image:.*|image: anuragkhapke2402/todo-app-two-tier:${{ env.BUILD_ID }}|g" K8s/todo-app-deployment.yaml
-            
+          sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}|g" K8s/todo-app-deployment.yaml
+
       - name: Commit and push updated deployment file
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add K8s/todo-app-deployment.yaml
-
-          # Only commit if there's an actual change
           git diff --cached --quiet && echo "No changes to commit." || (
             git commit -m "Update image tag to $BUILD_TAG"
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
             git push
-          ) 
+          )
+
