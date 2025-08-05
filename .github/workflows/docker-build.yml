@@ -38,4 +38,15 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
-
+      
+      - name: Replace image tag in Kubernetes deployment YAML
+        run: |
+          sed -i "s|image: .*/${{ env.IMAGE_NAME }}:.*|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}|" K8s/todo-app-deployment.yaml
+      
+      - name: Commit updated deployment file
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add K8s/todo-app-deployment.yaml
+          git commit -m "Update image tag to ${{ env.BUILD_TAG }}"
+          git push
