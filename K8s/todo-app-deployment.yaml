@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: anuragkhapke2402/todo-app-two-tier:256ac07
+          image: anuragkhapke2402/todo-app-two-tier:13c2bf9
           ports:
             - containerPort: 3000
           env:
