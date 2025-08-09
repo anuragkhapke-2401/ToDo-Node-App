@@ -1,4 +1,5 @@
 # TODO App - Two-Tier Architecture (Node.js + MySQL)
+# Automated GitOps CI/CD Pipeline with GitHub Actions, Docker Hub, ArgoCD, and Kubernetes
 
 This project is a simple two-tier TODO application built with:
 
