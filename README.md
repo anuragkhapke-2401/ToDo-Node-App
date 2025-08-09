@@ -124,3 +124,76 @@ then login into mysql using command **mysql -u root -p**  and enter password and
 <img width="1650" height="630" alt="Screenshot from 2025-08-03 21-13-03" src="https://github.com/user-attachments/assets/56c84839-514a-47d9-92f5-301cf99f8a02" />
 
 
+**Install Argo CD**
+
+     kubectl create namespace argocd
+
+     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+ 
+     kubectl get pod -n argocd   
+
+
+**Expose Argo CD Service (NodePort)**
+
+     kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+
+     kubectl get svc -n argocd
+
+**Note the NodePort for argocd-server (e.g., 32000).**
+
+**In my case i used Kind cluster on local host for that you will need to forword port**
+
+      kubectl port-forward svc/argocd-server -n argocd 8080:80
+
+**Access in browser:**
+
+     http://localhost:8080
+
+<img width="1852" height="1014" alt="Screenshot from 2025-08-09 22-29-38" src="https://github.com/user-attachments/assets/8db801fc-6dbc-4980-b44c-970143ea470b" />
+
+
+**Login to Argo CD**
+
+    # Get initial password
+    
+    kubectl -n argocd get secret argocd-initial-admin-secret \
+      -o jsonpath="{.data.password}" | base64 -d; echo
+
+    # Login CLI
+    
+    argocd login localhost:8080 \localhost:8080 \
+    --username admin \
+    --insecure               
+
+
+<img width="1853" height="171" alt="Screenshot from 2025-08-09 22-42-33" src="https://github.com/user-attachments/assets/afe2219e-9827-4683-b8e3-6fd73093cdbd" />
+
+
+**Create Argo CD App and Enable Auto-Sync + Self-Heal + Auto-Prune**
+
+    argocd app create todo-app \
+    --repo https://github.com/anuragkhapke-2401/ToDo-Node-App.git \
+    --path K8s \
+    --dest-server https://kubernetes.default.svc \
+    --dest-namespace default \
+    --sync-policy automated \
+    --self-heal \
+    --auto-prune
+
+  
+    argocd app list
+    argocd app get todo-app
+
+<img width="1847" height="654" alt="Screenshot from 2025-08-09 23-07-48" src="https://github.com/user-attachments/assets/bcfac33f-d5c6-47bc-87b9-531da94b2ab5" />
+
+**Access your app locally**
+
+    kubectl port-forward svc/my-app-service 3000:3000 -n default
+
+**Then open in browser**
+
+     http://localhost:3000
+
+<img width="1857" height="1014" alt="Screenshot from 2025-08-09 23-16-45" src="https://github.com/user-attachments/assets/a713f9ce-cff3-4a94-967f-ce8a7aa178f2" />
+
+    
